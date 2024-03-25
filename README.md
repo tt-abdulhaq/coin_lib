@@ -46,17 +46,33 @@ You can use the `FieldElement` class to perform arithmetic operations within a f
 from field_element import FieldElement
 
 # Define prime and elements
-p = 31
+p = 13
+a = FieldElement(7, p)
+b = FieldElement(12, p)
+c = FieldElement(6, p)
+
+print(a+b==c)
+print(f'a + b = {a+b}')
+print(f'c - b = {c-b}')
+
+
+print(a*b==c)
+print(f'a . c = {a*c}')
+print(f'b . a = {b * a}')
+
+t = FieldElement(7, 31)
+
+print(t**(-3))
+
+p = 19
+
 a = FieldElement(2, p)
-b = FieldElement(3, p)
-c = FieldElement(24, p)
 
-# Perform arithmetic operations
-result1 = a * b / c
-result2 = FieldElement(17, p) ** -3
-result3 = c ** -4 * 11
+b = FieldElement(7, p)
 
-# Print the results
-print("Result 1:", result1)
-print("Result 2:", result2)
-print("Result 3:", result3)
+c = FieldElement(5, p)
+
+print(a/b)
+print(b/c)
+
+
