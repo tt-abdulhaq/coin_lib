@@ -10,7 +10,7 @@ Mathematically, a finite field is defined as a finite set of numbers satisfying 
 - **Additive Identity**: 0 exists, and a + 0 = a.
 - **Multiplicative Identity**: 1 exists, and a × 1 = a.
 - **Additive Inverse**: For every a in the set, -a is also in the set, such that a + (-a) = 0.
-- **Multiplicative Inverse**: For every a in the set (except 0), a^-1 is also in the set, such that a × a^-1 = 1.
+- **Multiplicative Inverse**: For every a in the set (except 0), a<sup>-1</sup> is also in the set, such that a × a<sup>-1</sup> = 1.
 
 ## Defining Finite Sets
 
@@ -29,13 +29,13 @@ Fp = {0, 1, 2, ..., p-1}
 ### Multiplication and Exponentiation
 
 - **Multiplication**: a × b = (a × b) % p
-- **Exponentiation**: a^x = (a^x) % p
+- **Exponentiation**: a<sup>x</sup> = (a<sup>x</sup>) % p
 
 ### Division
 
 Division in finite fields is defined using the multiplicative inverse:
 
-- **Division**: a / b = a × b^-1 = a × b^(p-2)
+- **Division**: a / b = a × b<sup>-1</sup> = a × b<sup>(p-2)</sup>
 
 ## Example Usage
 
