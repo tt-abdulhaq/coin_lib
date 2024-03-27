@@ -29,7 +29,7 @@ Fp = {0, 1, 2, ..., p-1}
 ### Multiplication and Exponentiation
 
 - **Multiplication**: a × b = (a × b) % p
-- **Exponentiation**: a<sup>x</sup> = (a<sup>x</sup>) % p
+- **Exponentiation**: a<sup>x</sup> = (a<sup>x</sup>) % p and we have for negative exponent a<sup>-x</sup> = (a<sup>p-(x+1)</sup>) % p
 
 ### Division
 
