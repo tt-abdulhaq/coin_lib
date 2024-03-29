@@ -46,10 +46,7 @@ class FieldElement:
     
     def __pow__(self, exponent):
         # a^exponent = (a^exponent) % prime
-        n = exponent
-        while n < 0:
-            # if exponent was negative we have a^exponent = (a^(prime-(exponent+1)))%prime
-            n += self.prime - 1
+        n = exponent % (self.prime - 1)
         num = pow(self.num, n, self.prime)
         return self.__class__(num, self.prime)
     
@@ -59,6 +56,61 @@ class FieldElement:
             raise ValueError(f'{self} and {other} is not in some field')
         num = (self.num * pow(other.num, self.prime - 2, self.prime)) % self.prime
         return self.__class__(num, self.prime)
+
+class Point:
+
+    def __init__(self, x, y, a, b):
+        self.x = x
+        self.y = y
+        self.a = a
+        self.b = b
+        if self.x is None and self.y is None:
+            return   
+        if self.y**2 != self.x**3 + self.a * x + self.b:
+            raise ValueError(f"Value in not Point({self.x, self.y}) Curve")
+        
+    def __eq__(self, other) -> bool:
+        return self.x == other.x and self.y == other.y and self.a == other.a and self.b == other.b
+    
+    def __ne__(self, other) -> bool:
+        return  not (self == other)
+    
+    def __repr__(self) -> str:
+        return f"Point({self.x, self.y})"
+    
+    def __add__(self, other):
+
+        if self.a != other.a or self.b != other.b:
+            raise ValueError("Value in not on some Curve")
+
+        if self.x is None:
+            return other
+        if other.x is None:
+            return self
+
+        if self == other:
+            if self.x == other.x and self.y != other.y:
+                return self.__class__(None, None, self.a, self.b)
+            else:
+                print("here")
+                s = ((FieldElement(3, self.x.prime) * self.x**2) + self.a) / (FieldElement(2, self.x.prime) * self.y)
+                x = s**2 - (FieldElement(2, self.x.prime)*self.x)
+                y = s * (self.x - x) - self.y
+                return self.__class__(x, y, self.a, self.b)
+            
+            
+        else:
+            if self.y == FieldElement(0, self.x.prime) * self.x:
+                return self.__class__(None, None, self.a, self.b)
+            else:
+                print("Here")
+                s = (other.y - self.y) / (other.x - self.x)
+                x = s ** 2 - self.x - other.x
+                y =  s * (self.x - x) - self.y
+                return self.__class__(x, y, self.a, self.b)
+            
+        
+        
 
 
 
