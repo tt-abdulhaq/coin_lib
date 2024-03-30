@@ -4,9 +4,7 @@ class FieldElement:
 
     def __init__(self, num, prime):
         if num >= prime or num < 0:
-            error = 'Num {} not in field range 0 to {}'.format(
-                num, prime - 1)
-            raise ValueError(error)
+            raise ValueError('Num {} not in field range 0 to {}'.format(num, prime - 1))
         self.num = num
         self.prime = prime
 
@@ -14,45 +12,36 @@ class FieldElement:
         return 'FieldElement_{}({})'.format(self.prime, self.num)
 
     def __eq__(self, other):
-        if other is None:
-            return False
-        return self.num == other.num and self.prime == other.prime
+        return isinstance(other, FieldElement) and self.num == other.num and self.prime == other.prime
 
     def __ne__(self, other):
-        return not (self == other)
+        return not self == other
 
     def __add__(self, other):
         if self.prime != other.prime:
             raise TypeError('Cannot add two numbers in different Fields')
-        num = (self.num + other.num) % self.prime
-        return self.__class__(num, self.prime)
+        return self.__class__((self.num + other.num) % self.prime, self.prime)
 
     def __sub__(self, other):
         if self.prime != other.prime:
             raise TypeError('Cannot subtract two numbers in different Fields')
-        num = (self.num - other.num) % self.prime
-        return self.__class__(num, self.prime)
+        return self.__class__((self.num - other.num) % self.prime, self.prime)
 
     def __mul__(self, other):
         if self.prime != other.prime:
             raise TypeError('Cannot multiply two numbers in different Fields')
-        num = (self.num * other.num) % self.prime
-        return self.__class__(num, self.prime)
+        return self.__class__((self.num * other.num) % self.prime, self.prime)
 
     def __pow__(self, exponent):
-        n = exponent % (self.prime - 1)
-        num = pow(self.num, n, self.prime)
-        return self.__class__(num, self.prime)
+        return self.__class__(pow(self.num, exponent, self.prime), self.prime)
 
     def __truediv__(self, other):
         if self.prime != other.prime:
             raise TypeError('Cannot divide two numbers in different Fields')
-        num = (self.num * pow(other.num, self.prime - 2, self.prime)) % self.prime
-        return self.__class__(num, self.prime)
+        return pow(other.num, self.prime - 2, self.prime) * self 
 
     def __rmul__(self, coefficient):
-        num = (self.num * coefficient) % self.prime
-        return self.__class__(num=num, prime=self.prime)
+        return self.__class__((self.num * coefficient) % self.prime, self.prime)
     
 class Point:
 
@@ -63,12 +52,11 @@ class Point:
         self.y = y
         if self.x is None and self.y is None:
             return
-        if self.y**2 != self.x**3 + a * x + b:
+        if self.y ** 2 != self.x ** 3 + a * x + b:
             raise ValueError('({}, {}) is not on the curve'.format(x, y))
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y \
-            and self.a == other.a and self.b == other.b
+        return self.x == other.x and self.y == other.y and self.a == other.a and self.b == other.b
 
     def __ne__(self, other):
         return not (self == other)
@@ -108,39 +96,13 @@ class Point:
 
     def __rmul__(self, coefficient):
         coef = coefficient
-        current = self  
-        result = self.__class__(None, None, self.a, self.b)  # <2>
+        current = self
+        result = self.__class__(None, None, self.a, self.b)
         while coef:
-            if coef & 1:  
+            if coef & 1:
                 result += current
-            current += current  
-            coef >>= 1  
-        return result    
-
-
-
-    
-class ECCTest(TestCase):
-
-    def field_element_test(self):
-        prime = 13
-        a = FieldElement(num=7, prime=prime)
-        b = FieldElement(num=6, prime=prime)
-        print(a==a)
-        print(a!=b)
-        with self.assertRaises(ValueError):
-            print(FieldElement(num=14, prime=prime))
-        a_add_b = FieldElement(0,prime=prime)
-        print((a+b) == a_add_b)
-        a_sub_b = FieldElement(1, prime=prime)
-        print((a-b) == a_sub_b)
-        neg_a = -a
-        print(neg_a == b)
-        a_mul_b = FieldElement(3,prime=prime)
-        print((a*b) == a_mul_b)
-        a_pow_3 = FieldElement(5, prime=prime)
-        print((a**3) == a_pow_3)
-        a_div_b = FieldElement(12, prime=prime)
-        print((a/b) == a_div_b)
+            current += current
+            coef >>= 1
+        return result
 
         
